@@ -7,48 +7,46 @@
 function cpfIsValid (cpf) {
   'use strict';
 
-  function calcDigit (sum, regressive, cpfDigits) {
-    for (var i in cpfDigits) {
-      sum += cpfDigits[i] * regressive;
-      regressive--;
+  function getCpfDigit (sumOfDigits, regressiveCounter, cpfDigits) {
+    for (var index in cpfDigits) {
+      sumOfDigits += cpfDigits[index] * regressiveCounter;
+      regressiveCounter--;
     }
 
-    sum = 11 - (sum % 11);
-    return sum > 9 ? 0 : sum;
+    sumOfDigits = 11 - (sumOfDigits % 11);
+    return sumOfDigits > 9 ? 0 : sumOfDigits;
   }
 
   if (typeof cpf === 'undefined') return false;
   if (typeof cpf !== 'string') return false;
 
-  // Only numbers
-  var cleanCpf = cpf.replace(/\D+/g, '');
+  var cpfOnlyNumbers = cpf.replace(/\D+/g, '');
 
-  if (cleanCpf.length !== 11) return false;
+  if (cpfOnlyNumbers.length !== 11) return false;
 
-  var cpfNoDigits = cleanCpf.substring(0, 9);
-  var newCpf = cpfNoDigits;
+  var cpfNoDigits = cpfOnlyNumbers.substring(0, 9);
+  var generatedCpf = cpfNoDigits;
 
-  var firstDigit = calcDigit(0, 10, cpfNoDigits);
-  newCpf += firstDigit;
+  var firstCpfDigit = getCpfDigit(0, 10, cpfNoDigits);
+  generatedCpf += firstCpfDigit;
 
-  var lastDigit = calcDigit(0, 11, newCpf);
-  newCpf += lastDigit;
+  var lastCpfDigit = getCpfDigit(0, 11, generatedCpf);
+  generatedCpf += lastCpfDigit;
 
-  if (newCpf.length !== 11) return false;
+  if (generatedCpf.length !== 11) return false;
 
-  // Avoid sequences
   // IE lacks string repeat
-  var tempSequenceArray = [];
-  for (var i in newCpf) tempSequenceArray.push(newCpf[0]);
-  var sequence = tempSequenceArray.join('');
+  var sequenceFromFirstCpfDigitArray = [];
+  for (var _ in generatedCpf) sequenceFromFirstCpfDigitArray.push(generatedCpf[0]);
+  var sequenceFromCpfFirstDigit = sequenceFromFirstCpfDigitArray.join('');
 
   // Is sequence
-  if (cleanCpf === sequence) {
+  if (cpfOnlyNumbers === sequenceFromCpfFirstDigit) {
     return false;
   }
 
   // Valid
-  if (cleanCpf === newCpf) {
+  if (cpfOnlyNumbers === generatedCpf) {
     return true;
   }
 
@@ -64,3 +62,4 @@ if (cpfIsValid('59306262000')) console.log('CPF válido');
 // Inválidos
 if (!cpfIsValid('111.111.111-11')) console.log('CPF INVÁLIDO');
 if (!cpfIsValid('11111111111')) console.log('CPF INVÁLIDO');
+if (!cpfIsValid('00000000000')) console.log('CPF INVÁLIDO');
