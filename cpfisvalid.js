@@ -5,7 +5,7 @@
  * @returns {boolean} true para válido, false inválido
  */
 function cpfIsValid (cpf) {
-  'user strict';
+  'use strict';
 
   if (typeof cpf === 'undefined') return false;
   if (typeof cpf !== 'string') return false;
