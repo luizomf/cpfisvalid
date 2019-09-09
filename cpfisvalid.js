@@ -36,12 +36,12 @@ function cpfIsValid (cpf) {
   if (generatedCpf.length !== 11) return false;
 
   // IE lacks string repeat
-  var sequenceFromFirstCpfDigitArray = [];
-  for (var _ in generatedCpf) sequenceFromFirstCpfDigitArray.push(generatedCpf[0]);
-  var sequenceFromCpfFirstDigit = sequenceFromFirstCpfDigitArray.join('');
+  var sequenceFromFirstCpfCharArray = [];
+  for (var _ in generatedCpf) sequenceFromFirstCpfCharArray.push(generatedCpf[0]);
+  var sequenceFromFirstCpfChar = sequenceFromFirstCpfCharArray.join('');
 
   // Is sequence
-  if (cpfOnlyNumbers === sequenceFromCpfFirstDigit) {
+  if (cpfOnlyNumbers === sequenceFromFirstCpfChar) {
     return false;
   }
 
