@@ -7,6 +7,16 @@
 function cpfIsValid (cpf) {
   'use strict';
 
+  function calcDigit (sum, regressive, cpfDigits) {
+    for (var i in cpfDigits) {
+      sum += cpfDigits[i] * regressive;
+      regressive--;
+    }
+
+    sum = 11 - (sum % 11);
+    return sum > 9 ? 0 : sum;
+  }
+
   if (typeof cpf === 'undefined') return false;
   if (typeof cpf !== 'string') return false;
 
@@ -18,38 +28,18 @@ function cpfIsValid (cpf) {
   var cpfNoDigits = cleanCpf.substring(0, 9);
   var newCpf = cpfNoDigits;
 
-  // First Digit
-  var sum = 0;
-  var regressive = 10;
-
-  for (var i in cpfNoDigits) {
-    sum += cpfNoDigits[i] * regressive;
-    regressive--;
-  }
-
-  sum = 11 - (sum % 11);
-  var firstDigit = sum > 9 ? 0 : sum;
-
+  var firstDigit = calcDigit(0, 10, cpfNoDigits);
   newCpf += firstDigit;
 
-  // Last Digit
-  sum = 0;
-  regressive = 11;
-
-  for (i in newCpf) {
-    sum += newCpf[i] * regressive;
-    regressive--;
-  }
-
-  sum = 11 - (sum % 11);
-  var lastDigit = sum > 9 ? 0 : sum;
-
+  var lastDigit = calcDigit(0, 11, newCpf);
   newCpf += lastDigit;
+
+  if (newCpf.length !== 11) return false;
 
   // Avoid sequences
   // IE lacks string repeat
   var tempSequenceArray = [];
-  for (i in newCpf) tempSequenceArray.push(newCpf[0]);
+  for (var i in newCpf) tempSequenceArray.push(newCpf[0]);
   var sequence = tempSequenceArray.join('');
 
   // Is sequence
