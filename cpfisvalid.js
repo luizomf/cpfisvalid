@@ -1,6 +1,6 @@
 /**
  * Valida CPF em Javascript
- * Testado no IE5+, Chrome, Firefox, Safari, etc...
+ * Testado no IE5+, Chrome, Firefox, Safari, Node, etc...
  * @param {string} cpf
  * @returns {boolean} true para válido, false inválido
  */
