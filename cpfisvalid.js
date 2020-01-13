@@ -1,6 +1,6 @@
 /**
  * Valida CPF em Javascript
- * Testado no IE5+, Chrome, Firefox, Safari, Node, etc...
+ * Tested in IE6+, Chrome, Firefox, Safari, Node, etc...
  * @param {string} cpf
  * @returns {boolean} true para válido, false inválido
  */
@@ -8,8 +8,8 @@ function cpfIsValid (cpf) {
   'use strict';
 
   function getCpfDigit (sumOfDigits, regressiveCounter, cpfDigits) {
-    for (var index in cpfDigits) {
-      sumOfDigits += cpfDigits[index] * regressiveCounter;
+    for (var i = 0; i < cpfDigits.length; i++) {
+      sumOfDigits += parseInt(cpfDigits.charAt(i)) * regressiveCounter;
       regressiveCounter--;
     }
 
@@ -17,9 +17,8 @@ function cpfIsValid (cpf) {
     return sumOfDigits > 9 ? 0 : sumOfDigits;
   }
 
-  if (typeof cpf === 'undefined') return false;
+  // Only strings
   if (typeof cpf !== 'string') return false;
-
   var cpfOnlyNumbers = cpf.replace(/\D+/g, '');
 
   if (cpfOnlyNumbers.length !== 11) return false;
@@ -37,29 +36,18 @@ function cpfIsValid (cpf) {
 
   // IE lacks string repeat
   var sequenceFromFirstCpfCharArray = [];
-  for (var _ in generatedCpf) sequenceFromFirstCpfCharArray.push(generatedCpf[0]);
+  for (var i = 0; i < generatedCpf.length; i++) {
+    sequenceFromFirstCpfCharArray.push(generatedCpf.charAt(0));
+  }
+
   var sequenceFromFirstCpfChar = sequenceFromFirstCpfCharArray.join('');
 
   // Is sequence
-  if (cpfOnlyNumbers === sequenceFromFirstCpfChar) {
-    return false;
-  }
+  if (cpfOnlyNumbers === sequenceFromFirstCpfChar) return false;
 
   // Valid
-  if (cpfOnlyNumbers === generatedCpf) {
-    return true;
-  }
+  if (cpfOnlyNumbers === generatedCpf) return true;
 
   // Fallback invalid
   return false;
 }
-
-// Usage
-// Válidos
-if (cpfIsValid('593.062.620-00')) console.log('CPF válido');
-if (cpfIsValid('59306262000')) console.log('CPF válido');
-
-// Inválidos
-if (!cpfIsValid('111.111.111-11')) console.log('CPF INVÁLIDO');
-if (!cpfIsValid('11111111111')) console.log('CPF INVÁLIDO');
-if (!cpfIsValid('00000000000')) console.log('CPF INVÁLIDO');
